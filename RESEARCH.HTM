@@ -1,0 +1,562 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta name="generator"
+ content="HotHTML 3 CodeCleaner[Powered by HTML Tidy]">
+  <meta http-equiv="Content-Type"
+ content="text/html; charset=windows-1252">
+  <meta name="Generator" content="none">
+  <title>A NEW APPROACH TO THE MAX AND MIN FUNCTIONS</title>
+  <style type="text/css"><!-- /* Font Definitions */ @font-face {font-family:Wingdings; panose-1:5 0 0 0 0 0 0 0 0 0;} @font-face {font-family:Tahoma; panose-1:2 11 6 4 3 5 4 4 2 4;} /* Style Definitions */ p.MsoNormal, li.MsoNormal, div.MsoNormal {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:"Times New Roman";} @page Section1 {size:595.3pt 841.9pt; margin:70.85pt 3.0cm 70.85pt 3.0cm;} div.Section1 {page:Section1;} /* List Definitions */ ol {margin-bottom:0cm;} ul {margin-bottom:0cm;} --></style>
+</head>
+<body lang="ES-UY">
+<div class="Section1">
+<p class="MsoNormal" style="font-weight: bold; text-align: center;"><u><span
+ lang="EN-US" style="font-family: Tahoma;"> A NEW APPROACH TO THE MAX
+AND MIN FUNCTIONS</span></u></p>
+<p class="MsoNormal"><span lang="EN-US" style="font-family: Tahoma;">
+&nbsp;</span></p>
+<p class="MsoNormal"><span lang="EN-US" style="font-family: Tahoma;">
+&nbsp;</span></p>
+<p class="MsoNormal" style="font-weight: bold;"><u><span lang="EN-US"
+ style="font-family: Tahoma;"> PROLOGUE:</span></u></p>
+<p class="MsoNormal"><span lang="EN-US" style="font-family: Tahoma;">
+&nbsp;</span></p>
+<p class="MsoNormal"><span lang="EN-US" style="font-family: Tahoma;">
+Since a long time ago, I was wondering how to do a fast RGB to HSL
+conversion. In the conversion there always took place the so-called<b><i>
+min</i></b> and<b><i> max</i></b> functions that simply return the maximum
+or minimum between two values. The problem in it is simple: the
+function calling overhead. Ok, one could put inline the body of the
+function and all is right... but it leads to code very dependant on
+random branching.</span></p>
+<p class="MsoNormal"><span lang="EN-US" style="font-family: Tahoma;">
+&nbsp;</span></p>
+<p class="MsoNormal" style="font-weight: bold;"><u><span lang="EN-US"
+ style="font-family: Tahoma;"> RESEARCH RESULTS:</span></u></p>
+<p class="MsoNormal"><span lang="EN-US" style="font-family: Tahoma;">
+&nbsp;</span></p>
+<p class="MsoNormal"><span lang="EN-US" style="font-family: Tahoma;">
+Lets start with a transcription of the<b><i> max</i></b> function body:</span></p>
+<p class="MsoNormal"><span lang="EN-US" style="font-family: Tahoma;">
+&nbsp;</span></p>
+<p class="MsoNormal" style="text-align: center;"><b><i><span
+ lang="EN-US" style="font-family: &quot;Courier New&quot;;"> If</span></i></b><i><span
+ lang="EN-US" style="font-family: &quot;Courier New&quot;;"> x &gt; y<b> then</b>
+max = x<b> else</b> max = y</span></i></p>
+<p class="MsoNormal" style="font-style: italic; text-align: center;"><span
+ lang="EN-US" style="font-family: Tahoma;"> &nbsp;</span></p>
+<p class="MsoNormal"><span lang="EN-US" style="font-family: Tahoma;">
+Dealing with the RGB to HSL conversion will take you in some point to
+this code:</span></p>
+<p class="MsoNormal"><span lang="EN-US" style="font-family: Tahoma;">
+&nbsp;</span></p>
+<p class="MsoNormal" style="text-align: center;"><span lang="EN-US"
+ style="font-family: &quot;Courier New&quot;;"> cMax =<b><i> max</i></b> (<b><i> max</i></b>
+(R, G), B)</span></p>
+<p class="MsoNormal"><span lang="EN-US" style="font-family: Tahoma;">
+&nbsp;</span></p>
+<p class="MsoNormal"><span lang="EN-US" style="font-family: Tahoma;"> or
+inlined it takes this messy form:</span></p>
+<p class="MsoNormal"><span lang="EN-US" style="font-family: Tahoma;">
+&nbsp;</span></p>
+<div style="text-align: center;">
+<table class="MsoTableGrid" border="0" cellspacing="0" cellpadding="0"
+ style="border-collapse: collapse;">
+  <tbody>
+    <tr style="height: 73.25pt;">
+      <td style="padding: 0cm 5.4pt; height: 73.25pt;">
+      <p class="MsoNormal"><b><i><span lang="EN-US"
+ style="font-family: &quot;Courier New&quot;;"> If</span></i></b><span lang="EN-US"
+ style="font-family: &quot;Courier New&quot;;"> R &gt; G<b><i> then</i></b></span></p>
+      <p class="MsoNormal"><span lang="EN-US"
+ style="font-family: &quot;Courier New&quot;;"> &nbsp;&nbsp;&nbsp;&nbsp;<b><i> If</i></b>
+R &gt; B<b><i> then</i></b> cMax = R<b><i> Else</i></b> cMax = B</span></p>
+      <p class="MsoNormal"
+ style="font-style: italic; font-weight: bold;"><span lang="EN-US"
+ style="font-family: &quot;Courier New&quot;;"> Else</span></p>
+      <p class="MsoNormal"><span lang="EN-US"
+ style="font-family: &quot;Courier New&quot;;"> &nbsp;&nbsp;&nbsp;&nbsp;<b><i> If</i></b>
+G &gt; B<b><i> then</i></b> cMax = G<b><i> Else</i></b> cMax = B</span></p>
+      <p class="MsoNormal"
+ style="font-style: italic; font-weight: bold;"><span lang="EN-US"
+ style="font-family: &quot;Courier New&quot;;"> End If</span></p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<p class="MsoNormal"><span lang="EN-US" style="font-family: Tahoma;">
+&nbsp;</span></p>
+<p class="MsoNormal"><span lang="EN-US" style="font-family: Tahoma;">
+This is the most you can optimize the code for a 3 variable<b><i> max</i></b>
+function using the classic method.</span></p>
+<p class="MsoNormal"><span lang="EN-US" style="font-family: Tahoma;">
+&nbsp;</span></p>
+<p class="MsoNormal"><span lang="EN-US" style="font-family: Tahoma;">
+But I always thought there should be out there a better approach, and
+finally I got it. There is a simple but powerful mathematics equation
+that got my attention in the last two weeks...</span></p>
+<p class="MsoNormal" style="text-align: center;"><span lang="EN-US"
+ style="font-family: Tahoma;"> &nbsp;</span></p>
+<p class="MsoNormal" style="text-align: center;"><span lang="EN-US"
+ style="font-family: Tahoma;"><sub><img width="247" height="41"
+ src="image001.gif"></sub></span></p>
+<p class="MsoNormal"><span lang="EN-US" style="font-family: Tahoma;">
+&nbsp;</span></p>
+<p class="MsoNormal"><span lang="EN-US" style="font-family: Tahoma;">
+Which with my not-so-smart mathematics knowledge I managed to extend it
+to a 3 variable max function:</span></p>
+<p class="MsoNormal"><span lang="EN-US" style="font-family: Tahoma;">
+&nbsp;</span></p>
+<p class="MsoNormal" style="text-align: center;"><span lang="EN-US"
+ style="font-family: Tahoma;"><sub><img width="508" height="41"
+ src="image002.gif"></sub></span></p>
+<p class="MsoNormal"><span lang="EN-US" style="font-family: Tahoma;">
+&nbsp;</span></p>
+<p class="MsoNormal"><span lang="EN-US" style="font-family: Tahoma;">
+Translated to VB code it is like this:</span></p>
+<p class="MsoNormal"><span lang="EN-US" style="font-family: Tahoma;">
+&nbsp;</span></p>
+<p class="MsoNormal" style="text-align: center;"><span
+ style="font-family: &quot;Courier New&quot;;"> max = (x + y +<b><i> Abs</i></b> (x
+- y) + 2 * z +<b><i> Abs</i></b> (x + y +<b><i> Abs</i></b> (x - y) - 2 *
+z)) \ 4</span></p>
+<p class="MsoNormal"><span style="font-family: Tahoma;"> &nbsp;</span></p>
+<p class="MsoNormal"><span lang="EN-US" style="font-family: Tahoma;"> As
+you see it appears that the first (old) method is simpler and faster
+because it involves less operations. This is not so true because it
+includes branching code, which is certainly slower than doing direct
+branch-less calculations. Let alone the use of IIf, since it is a
+poorly performing function...</span></p>
+<p class="MsoNormal"><span lang="EN-US" style="font-family: Tahoma;">
+More over, a close inspection to their possible assembler (machine code)
+representation shows that they take the same amount of clocks in the
+average modern processor. I will take the 2 variable version as the
+example, since the assembly code representation for the 3 variable
+function is mostly analog, just a bit more complicated (and lengthy)</span></p>
+<p class="MsoNormal"><span lang="EN-US" style="font-family: Tahoma;">
+&nbsp;</span></p>
+<p class="MsoNormal"><span lang="EN-US" style="font-family: Tahoma;">
+Function 1 would be like this, assuming we already have<i> ptrX = x</i> and<i>
+ptrY = y</i> , both pointers to our numbers. The result is stored in eax.</span></p>
+<p class="MsoNormal"><span lang="EN-US" style="font-family: Tahoma;">
+&nbsp;</span></p>
+<div style="text-align: center;">
+<table class="MsoTableGrid" border="0" cellspacing="0" cellpadding="0"
+ style="border-collapse: collapse;">
+  <tbody>
+    <tr style="height: 13.65pt;">
+      <td width="233" valign="top"
+ style="padding: 0cm 5.4pt; width: 174.5pt; height: 13.65pt;">
+      <p class="MsoNormal"><b><span lang="EN-US"
+ style="font-family: &quot;Courier New&quot;;"> mov</span></b><span lang="EN-US"
+ style="font-family: &quot;Courier New&quot;;"> eax, [ptrX]</span></p>
+      </td>
+      <td width="323" valign="top"
+ style="padding: 0cm 5.4pt; width: 242.2pt; height: 13.65pt;">
+      <p class="MsoNormal"><span lang="EN-US"
+ style="font-family: &quot;Courier New&quot;; color: green;"> &nbsp;</span></p>
+      </td>
+    </tr>
+    <tr style="height: 12.85pt;">
+      <td width="233" valign="top"
+ style="padding: 0cm 5.4pt; width: 174.5pt; height: 12.85pt;">
+      <p class="MsoNormal"><b><span lang="EN-US"
+ style="font-family: &quot;Courier New&quot;;"> cmp</span></b><span lang="EN-US"
+ style="font-family: &quot;Courier New&quot;;"> eax, [ptrY]</span></p>
+      </td>
+      <td width="323" valign="top"
+ style="padding: 0cm 5.4pt; width: 242.2pt; height: 12.85pt;">
+      <p class="MsoNormal"><span lang="EN-US"
+ style="font-family: &quot;Courier New&quot;; color: green;"> &nbsp;</span></p>
+      </td>
+    </tr>
+    <tr style="height: 13.65pt;">
+      <td width="233" valign="top"
+ style="padding: 0cm 5.4pt; width: 174.5pt; height: 13.65pt;">
+      <p class="MsoNormal"><b><span lang="EN-US"
+ style="font-family: &quot;Courier New&quot;;"> jge</span></b><span lang="EN-US"
+ style="font-family: &quot;Courier New&quot;;"> xisgreater</span></p>
+      </td>
+      <td width="323" valign="top"
+ style="padding: 0cm 5.4pt; width: 242.2pt; height: 13.65pt;">
+      <p class="MsoNormal"><span lang="EN-US"
+ style="font-family: &quot;Courier New&quot;; color: green;"> ;jump if X is greater</span></p>
+      </td>
+    </tr>
+    <tr style="height: 13.65pt;">
+      <td width="233" valign="top"
+ style="padding: 0cm 5.4pt; width: 174.5pt; height: 13.65pt;">
+      <p class="MsoNormal"><b><span lang="EN-US"
+ style="font-family: &quot;Courier New&quot;;"> mov</span></b><span lang="EN-US"
+ style="font-family: &quot;Courier New&quot;;"> eax, [ptrY]</span></p>
+      </td>
+      <td width="323" valign="top"
+ style="padding: 0cm 5.4pt; width: 242.2pt; height: 13.65pt;">
+      <p class="MsoNormal"><span lang="EN-US"
+ style="font-family: &quot;Courier New&quot;; color: green;"> ;put Y into eax</span></p>
+      </td>
+    </tr>
+    <tr style="height: 13.65pt;">
+      <td width="233" valign="top"
+ style="padding: 0cm 5.4pt; width: 174.5pt; height: 13.65pt;">
+      <p class="MsoNormal"><span lang="EN-US"
+ style="font-family: &quot;Courier New&quot;;"> xisgreater:</span></p>
+      </td>
+      <td width="323" valign="top"
+ style="padding: 0cm 5.4pt; width: 242.2pt; height: 13.65pt;">
+      <p class="MsoNormal"><span lang="EN-US"
+ style="font-family: &quot;Courier New&quot;; color: green;"> ;the label we jump
+into</span></p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<p class="MsoNormal"><span lang="EN-US" style="font-family: Tahoma;">
+&nbsp;</span></p>
+<p class="MsoNormal"><span lang="EN-US" style="font-family: Tahoma;">
+&nbsp;</span></p>
+<p class="MsoNormal"><span lang="EN-US" style="font-family: Tahoma;">
+Function 2 ends up being the following code:</span></p>
+<p class="MsoNormal"><span lang="EN-US" style="font-family: Tahoma;">
+&nbsp;</span></p>
+<div style="text-align: center;">
+<table class="MsoTableGrid" border="0" cellspacing="0" cellpadding="0"
+ style="border-collapse: collapse;">
+  <tbody>
+    <tr style="height: 13.65pt;">
+      <td width="233" valign="top"
+ style="padding: 0cm 5.4pt; width: 174.5pt; height: 13.65pt;">
+      <p class="MsoNormal"><b><span lang="EN-US"
+ style="font-family: &quot;Courier New&quot;;"> mov</span></b><span lang="EN-US"
+ style="font-family: &quot;Courier New&quot;;"> eax, [ptrX]</span></p>
+      </td>
+      <td width="323" valign="top"
+ style="padding: 0cm 5.4pt; width: 242.2pt; height: 13.65pt;">
+      <p class="MsoNormal"><span lang="EN-US"
+ style="font-family: &quot;Courier New&quot;; color: green;"> ;calculate (X Y)</span></p>
+      </td>
+    </tr>
+    <tr style="height: 12.85pt;">
+      <td width="233" valign="top"
+ style="padding: 0cm 5.4pt; width: 174.5pt; height: 12.85pt;">
+      <p class="MsoNormal"><b><span lang="EN-US"
+ style="font-family: &quot;Courier New&quot;;"> sub</span></b><span lang="EN-US"
+ style="font-family: &quot;Courier New&quot;;"> eax, [ptrY]</span></p>
+      </td>
+      <td width="323" valign="top"
+ style="padding: 0cm 5.4pt; width: 242.2pt; height: 12.85pt;">
+      <p class="MsoNormal"><span lang="EN-US"
+ style="font-family: &quot;Courier New&quot;; color: green;"> &nbsp;</span></p>
+      </td>
+    </tr>
+    <tr style="height: 13.65pt;">
+      <td width="233" valign="top"
+ style="padding: 0cm 5.4pt; width: 174.5pt; height: 13.65pt;">
+      <p class="MsoNormal"><b><span lang="EN-US"
+ style="font-family: &quot;Courier New&quot;;"> and</span></b><span lang="EN-US"
+ style="font-family: &quot;Courier New&quot;;"> eax, 0x7FFFFFFF</span></p>
+      </td>
+      <td width="323" valign="top"
+ style="padding: 0cm 5.4pt; width: 242.2pt; height: 13.65pt;">
+      <p class="MsoNormal"><span lang="EN-US"
+ style="font-family: &quot;Courier New&quot;; color: green;"> ;remove the sign for
+ABS(X Y)</span></p>
+      </td>
+    </tr>
+    <tr style="height: 13.65pt;">
+      <td width="233" valign="top"
+ style="padding: 0cm 5.4pt; width: 174.5pt; height: 13.65pt;">
+      <p class="MsoNormal"><b><span lang="EN-US"
+ style="font-family: &quot;Courier New&quot;;"> add</span></b><span lang="EN-US"
+ style="font-family: &quot;Courier New&quot;;"> eax, [ptrX]</span></p>
+      </td>
+      <td width="323" valign="top"
+ style="padding: 0cm 5.4pt; width: 242.2pt; height: 13.65pt;">
+      <p class="MsoNormal"><span lang="EN-US"
+ style="font-family: &quot;Courier New&quot;; color: green;"> ;now go for the (X +
+Y)</span></p>
+      </td>
+    </tr>
+    <tr style="height: 13.65pt;">
+      <td width="233" valign="top"
+ style="padding: 0cm 5.4pt; width: 174.5pt; height: 13.65pt;">
+      <p class="MsoNormal"><b><span lang="EN-US"
+ style="font-family: &quot;Courier New&quot;;"> add</span></b><span lang="EN-US"
+ style="font-family: &quot;Courier New&quot;;"> eax, [ptrY]</span></p>
+      </td>
+      <td width="323" valign="top"
+ style="padding: 0cm 5.4pt; width: 242.2pt; height: 13.65pt;">
+      <p class="MsoNormal"><span lang="EN-US"
+ style="font-family: &quot;Courier New&quot;; color: green;"> &nbsp;</span></p>
+      </td>
+    </tr>
+    <tr style="height: 13.65pt;">
+      <td width="233" valign="top"
+ style="padding: 0cm 5.4pt; width: 174.5pt; height: 13.65pt;">
+      <p class="MsoNormal"><b><span lang="EN-US"
+ style="font-family: &quot;Courier New&quot;;"> shr</span></b><span lang="EN-US"
+ style="font-family: &quot;Courier New&quot;;"> eax, 0x2</span></p>
+      </td>
+      <td width="323" valign="top"
+ style="padding: 0cm 5.4pt; width: 242.2pt; height: 13.65pt;">
+      <p class="MsoNormal"><span lang="EN-US"
+ style="font-family: &quot;Courier New&quot;; color: green;"> ;divide by 2</span></p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<p class="MsoNormal"><span lang="EN-US" style="font-family: Tahoma;">
+&nbsp;</span></p>
+<p class="MsoNormal"><span lang="EN-US" style="font-family: Tahoma;">
+&nbsp;</span></p>
+<p class="MsoNormal"><span lang="EN-US" style="font-family: Tahoma;"> If
+you do not know assembler, this may seem vary cryptic to you... in any
+case, even someone that knows assembler could still be thinking the
+first approach is better.</span></p>
+<p class="MsoNormal"><span lang="EN-US" style="font-family: Tahoma;">
+Now we will do an inspection to the number of clocks it takes the
+processor to execute both series of instructions. Results are based on
+the AMD Athlon processor, but it is pretty similar to Pentium 3-4
+processors.</span></p>
+<p class="MsoNormal"><span lang="EN-US" style="font-family: Tahoma;">
+&nbsp;</span></p>
+<p class="MsoNormal"><span lang="EN-US" style="font-family: Tahoma;">
+Function 1:</span></p>
+<div style="text-align: center;">
+<table class="MsoTableGrid" border="0" cellspacing="0" cellpadding="0"
+ style="border-collapse: collapse;">
+  <tbody>
+    <tr style="height: 13.65pt;">
+      <td width="233" valign="top"
+ style="padding: 0cm 5.4pt; width: 174.5pt; height: 13.65pt;">
+      <p class="MsoNormal"><b><span lang="EN-US"
+ style="font-family: &quot;Courier New&quot;;"> mov</span></b><span lang="EN-US"
+ style="font-family: &quot;Courier New&quot;;"> eax, [ptrX]</span></p>
+      </td>
+      <td width="323" valign="top"
+ style="padding: 0cm 5.4pt; width: 242.2pt; height: 13.65pt;">
+      <p class="MsoNormal"><span lang="EN-US"
+ style="font-family: &quot;Courier New&quot;; color: green;"> 3 clocks</span></p>
+      </td>
+    </tr>
+    <tr style="height: 12.85pt;">
+      <td width="233" valign="top"
+ style="padding: 0cm 5.4pt; width: 174.5pt; height: 12.85pt;">
+      <p class="MsoNormal"><b><span lang="EN-US"
+ style="font-family: &quot;Courier New&quot;;"> cmp</span></b><span lang="EN-US"
+ style="font-family: &quot;Courier New&quot;;"> eax, [ptrY]</span></p>
+      </td>
+      <td width="323" valign="top"
+ style="padding: 0cm 5.4pt; width: 242.2pt; height: 12.85pt;">
+      <p class="MsoNormal"><span lang="EN-US"
+ style="font-family: &quot;Courier New&quot;; color: green;"> 4 clocks</span></p>
+      </td>
+    </tr>
+    <tr style="height: 13.65pt;">
+      <td width="233" valign="top"
+ style="padding: 0cm 5.4pt; width: 174.5pt; height: 13.65pt;">
+      <p class="MsoNormal"><b><span lang="EN-US"
+ style="font-family: &quot;Courier New&quot;;"> jge</span></b><span lang="EN-US"
+ style="font-family: &quot;Courier New&quot;;"> xisgreater</span></p>
+      </td>
+      <td width="323" valign="top"
+ style="padding: 0cm 5.4pt; width: 242.2pt; height: 13.65pt;">
+      <p class="MsoNormal"><span lang="EN-US"
+ style="font-family: &quot;Courier New&quot;; color: green;"> 1 clock *</span></p>
+      </td>
+    </tr>
+    <tr style="height: 13.65pt;">
+      <td width="233" valign="top"
+ style="padding: 0cm 5.4pt; width: 174.5pt; height: 13.65pt;">
+      <p class="MsoNormal"><b><span lang="EN-US"
+ style="font-family: &quot;Courier New&quot;;"> mov</span></b><span lang="EN-US"
+ style="font-family: &quot;Courier New&quot;;"> eax, [ptrY]</span></p>
+      </td>
+      <td width="323" valign="top"
+ style="padding: 0cm 5.4pt; width: 242.2pt; height: 13.65pt;">
+      <p class="MsoNormal"><span lang="EN-US"
+ style="font-family: &quot;Courier New&quot;; color: green;"> 1 clock (cached
+value)</span></p>
+      </td>
+    </tr>
+    <tr style="height: 13.65pt;">
+      <td width="233" valign="top"
+ style="padding: 0cm 5.4pt; width: 174.5pt; height: 13.65pt;">
+      <p class="MsoNormal"><span lang="EN-US"
+ style="font-family: &quot;Courier New&quot;;"> xisgreater:</span></p>
+      </td>
+      <td width="323" valign="top"
+ style="padding: 0cm 5.4pt; width: 242.2pt; height: 13.65pt;">
+      <p class="MsoNormal"><span lang="EN-US"
+ style="font-family: &quot;Courier New&quot;; color: green;"> &nbsp;</span></p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<p class="MsoNormal"><span lang="EN-US" style="font-family: Tahoma;">
+&nbsp;</span></p>
+<p class="MsoNormal"><span lang="EN-US" style="font-family: Tahoma;"> *
+this value assumes it was a predicted branch. This is where the code
+varies between processors. The branch predictor is not always accurate,
+and it may lead to the processor trashing the executing pipeline.</span></p>
+<p class="MsoNormal"><span lang="EN-US" style="font-family: Tahoma;">
+The ideal case of this code is 8-9 clocks, but we have a not ideal case
+where it may take around 12 clocks.</span></p>
+<p class="MsoNormal"><span lang="EN-US" style="font-family: Tahoma;">
+&nbsp;</span></p>
+<p class="MsoNormal"><span lang="EN-US" style="font-family: Tahoma;">
+&nbsp;</span></p>
+<p class="MsoNormal"><span lang="EN-US" style="font-family: Tahoma;">
+Function 2:</span></p>
+<div style="text-align: center;">
+<table class="MsoTableGrid" border="0" cellspacing="0" cellpadding="0"
+ style="border-collapse: collapse;">
+  <tbody>
+    <tr style="height: 13.65pt;">
+      <td width="233" valign="top"
+ style="padding: 0cm 5.4pt; width: 174.5pt; height: 13.65pt;">
+      <p class="MsoNormal"><b><span lang="EN-US"
+ style="font-family: &quot;Courier New&quot;;"> mov</span></b><span lang="EN-US"
+ style="font-family: &quot;Courier New&quot;;"> eax, [ptrX]</span></p>
+      </td>
+      <td width="323" valign="top"
+ style="padding: 0cm 5.4pt; width: 242.2pt; height: 13.65pt;">
+      <p class="MsoNormal"><span lang="EN-US"
+ style="font-family: &quot;Courier New&quot;; color: green;"> 3 clocks</span></p>
+      </td>
+    </tr>
+    <tr style="height: 12.85pt;">
+      <td width="233" valign="top"
+ style="padding: 0cm 5.4pt; width: 174.5pt; height: 12.85pt;">
+      <p class="MsoNormal"><b><span lang="EN-US"
+ style="font-family: &quot;Courier New&quot;;"> sub</span></b><span lang="EN-US"
+ style="font-family: &quot;Courier New&quot;;"> eax, [ptrY]</span></p>
+      </td>
+      <td width="323" valign="top"
+ style="padding: 0cm 5.4pt; width: 242.2pt; height: 12.85pt;">
+      <p class="MsoNormal"><span lang="EN-US"
+ style="font-family: &quot;Courier New&quot;; color: green;"> 4 clocks</span></p>
+      </td>
+    </tr>
+    <tr style="height: 13.65pt;">
+      <td width="233" valign="top"
+ style="padding: 0cm 5.4pt; width: 174.5pt; height: 13.65pt;">
+      <p class="MsoNormal"><b><span lang="EN-US"
+ style="font-family: &quot;Courier New&quot;;"> and</span></b><span lang="EN-US"
+ style="font-family: &quot;Courier New&quot;;"> eax, 0x7FFFFFFF</span></p>
+      </td>
+      <td width="323" valign="top"
+ style="padding: 0cm 5.4pt; width: 242.2pt; height: 13.65pt;">
+      <p class="MsoNormal"><span lang="EN-US"
+ style="font-family: &quot;Courier New&quot;; color: green;"> 1 clock</span></p>
+      </td>
+    </tr>
+    <tr style="height: 13.65pt;">
+      <td width="233" valign="top"
+ style="padding: 0cm 5.4pt; width: 174.5pt; height: 13.65pt;">
+      <p class="MsoNormal"><b><span lang="EN-US"
+ style="font-family: &quot;Courier New&quot;;"> add</span></b><span lang="EN-US"
+ style="font-family: &quot;Courier New&quot;;"> eax, [ptrX]</span></p>
+      </td>
+      <td width="323" valign="top"
+ style="padding: 0cm 5.4pt; width: 242.2pt; height: 13.65pt;">
+      <p class="MsoNormal"><span lang="EN-US"
+ style="font-family: &quot;Courier New&quot;; color: green;"> 1 clock (value is in
+cache)</span></p>
+      </td>
+    </tr>
+    <tr style="height: 13.65pt;">
+      <td width="233" valign="top"
+ style="padding: 0cm 5.4pt; width: 174.5pt; height: 13.65pt;">
+      <p class="MsoNormal"><b><span lang="EN-US"
+ style="font-family: &quot;Courier New&quot;;"> add</span></b><span lang="EN-US"
+ style="font-family: &quot;Courier New&quot;;"> eax, [ptrY]</span></p>
+      </td>
+      <td width="323" valign="top"
+ style="padding: 0cm 5.4pt; width: 242.2pt; height: 13.65pt;">
+      <p class="MsoNormal"><span lang="EN-US"
+ style="font-family: &quot;Courier New&quot;; color: green;"> 1 clock (same as
+above)</span></p>
+      </td>
+    </tr>
+    <tr style="height: 13.65pt;">
+      <td width="233" valign="top"
+ style="padding: 0cm 5.4pt; width: 174.5pt; height: 13.65pt;">
+      <p class="MsoNormal"><b><span lang="EN-US"
+ style="font-family: &quot;Courier New&quot;;"> shr</span></b><span lang="EN-US"
+ style="font-family: &quot;Courier New&quot;;"> eax, 0x2</span></p>
+      </td>
+      <td width="323" valign="top"
+ style="padding: 0cm 5.4pt; width: 242.2pt; height: 13.65pt;">
+      <p class="MsoNormal"><span lang="EN-US"
+ style="font-family: &quot;Courier New&quot;; color: green;"> 1 clock</span></p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<p class="MsoNormal"><span lang="EN-US" style="font-family: Tahoma;">
+&nbsp;</span></p>
+<p class="MsoNormal"><span lang="EN-US" style="font-family: Tahoma;">
+Total = 11 clocks</span></p>
+<p class="MsoNormal"><span lang="EN-US" style="font-family: Tahoma;">
+&nbsp;</span></p>
+<p class="MsoNormal"><span lang="EN-US" style="font-family: Tahoma;"> So
+far we see that both codes perform similarly, and we have still an
+advantage in the optimized code:</span></p>
+<p class="MsoNormal"><span lang="EN-US" style="font-family: Tahoma;"> In
+the case on the Athlon processor, the 11 clocks it should take, could
+be reduced since the Athlon processor decodes 3 instructions per clock.
+This can not be done in the branching code, because a wrong prediction
+will make it trash the pipeline and start all over again.</span></p>
+<p class="MsoNormal"><span lang="EN-US" style="font-family: Tahoma;">
+&nbsp;</span></p>
+<p class="MsoNormal"><span lang="EN-US" style="font-family: Tahoma;">
+&nbsp;</span></p>
+<p class="MsoNormal" style="font-weight: bold;"><u><span lang="EN-US"
+ style="font-family: Tahoma;"> RETURNING BACK TO VB:</span></u></p>
+<p class="MsoNormal"><span lang="EN-US" style="font-family: Tahoma;">
+&nbsp;</span></p>
+<p class="MsoNormal"><span lang="EN-US" style="font-family: Tahoma;">
+Ok, I guess I got a bit carried away with the explanation, but in any
+case while using VB we dont have control over the compiler to make it
+generate the assembly code we want. All we can do is use better high
+level instructions to persuade the compiler generating better code,
+nothing else.</span></p>
+<p class="MsoNormal"><span lang="EN-US" style="font-family: Tahoma;"> My
+testing ended with a tie between both versions of the code on both my
+AMD Duron @ 700 mhz, and an old AMD K5 @ 100 mhz.</span></p>
+<p class="MsoNormal"><span lang="EN-US" style="font-family: Tahoma;"> I
+havent tested yet the code under a Pentium platform, but I guess that
+it is there where you will see the diference, specially on the first
+versions of the P4 where it suffered a lot from wrong branch
+predictions.</span></p>
+<p class="MsoNormal"><span lang="EN-US" style="font-family: Tahoma;">
+&nbsp;</span></p>
+<p class="MsoNormal"><span lang="EN-US" style="font-family: Tahoma;">
+&nbsp;</span></p>
+<p class="MsoNormal" style="font-weight: bold;"><u><span lang="EN-US"
+ style="font-family: Tahoma;"> CONCLUSION:</span></u></p>
+<p class="MsoNormal"><span lang="EN-US" style="font-family: Tahoma;">
+&nbsp;</span></p>
+<p class="MsoNormal"><span lang="EN-US" style="font-family: Tahoma;">
+Not too much to conclude... use my approach if you like it more, it will
+lead to the same performance (again, not tested on Pentium processors).</span></p>
+<p class="MsoNormal"><span lang="EN-US" style="font-family: Tahoma;"> If
+you get some results on the Intel platform, post here your experiences.
+I would really want to know if my approach gets better on these
+processors.</span></p>
+<p class="MsoNormal"><span lang="EN-US" style="font-family: Tahoma;">&nbsp;<br>
+<br>
+</span></p>
+<p class="MsoNormal"><span lang="EN-US" style="font-family: Tahoma;">gonchuki<br>
+e-m@il: gonchuki@yahoo.es<br>
+</span></p>
+</div>
+</body>
+</html>
